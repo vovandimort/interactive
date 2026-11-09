@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word: списки, символи, формули — 9 клас</title>
+<style>
+:root{
+  --blue:#2b579a; --blue2:#1e3f73; --bg:#f3f5f9; --card:#fff; --ink:#1f2937; --muted:#64748b;
+  --ok:#15803d; --okbg:#e8f6ec; --bad:#b91c1c; --badbg:#fdecec; --line:#d9e0ea; --accent:#f59e0b;
+}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 "Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--blue);color:#fff;padding:12px 16px;position:sticky;top:0;z-index:20;box-shadow:0 2px 6px #0003}
+.hwrap{max-width:1000px;margin:auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+header h1{font-size:18px;margin:0;font-weight:600}
+.who{font-size:14px;opacity:.95}
+.who button{background:#ffffff26;color:#fff;border:0;border-radius:6px;padding:2px 8px;cursor:pointer;margin-left:6px}
+.pbar{height:6px;background:#ffffff40;border-radius:4px;overflow:hidden;width:100%}
+.pbar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+nav{max-width:1000px;margin:12px auto 0;padding:0 12px;display:flex;gap:6px;flex-wrap:wrap}
+nav button{flex:1 1 130px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;cursor:pointer;font:inherit;font-size:14px;color:var(--ink)}
+nav button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+nav button.done::after{content:" ✓";color:var(--ok);font-weight:700}
+nav button.on.done::after{color:#bbf7d0}
+main{max-width:1000px;margin:12px auto 60px;padding:0 12px}
+section{display:none;background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 1px 4px #0001}
+section.on{display:block}
+h2{margin-top:0;color:var(--blue2)}
+h3{color:var(--blue2);margin-bottom:6px}
+kbd{background:#eef2f7;border:1px solid #c5cedb;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font:13px Consolas,monospace}
+.box{border-left:4px solid var(--blue);background:#eef3fb;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.box.warn{border-color:var(--accent);background:#fff7e6}
+.task{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:16px 0;background:#fbfcfe}
+.task h3{margin-top:0}
+.task.done{border-color:#86d19b;background:var(--okbg)}
+.badge{display:inline-block;font-size:12px;background:var(--accent);color:#fff;border-radius:10px;padding:1px 9px;margin-right:6px;vertical-align:middle}
+.task.done .badge{background:var(--ok)}
+button.btn{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer;font:inherit}
+button.btn:hover{background:var(--blue2)}
+button.btn.sec{background:#e6ebf3;color:var(--ink)}
+button.btn.sec:hover{background:#d5dde9}
+button.btn:disabled{opacity:.5;cursor:not-allowed}
+input[type=text],textarea,select{font:inherit;padding:8px 10px;border:1px solid #b9c4d4;border-radius:8px;width:100%;background:#fff;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.msg{margin-top:8px;font-size:14px;min-height:20px}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+/* list sim */
+.sim{display:grid;grid-template-columns:1fr 230px;gap:14px}
+@media(max-width:720px){.sim{grid-template-columns:1fr}}
+.paper{background:#fff;border:1px solid #cfd8e6;box-shadow:0 2px 8px #0002;padding:18px 20px;border-radius:4px;font-family:"Times New Roman",serif;font-size:17px}
+.li{padding:3px 8px;border-radius:4px;cursor:pointer;outline:none;border:1px solid transparent;white-space:nowrap}
+.li:hover{background:#eef3fb}
+.li.sel{background:#dbe8fb;border-color:#7ba3e0}
+.li .n{display:inline-block;min-width:44px;font-weight:600}
+.ctl{display:flex;flex-direction:column;gap:8px}
+.mark{margin-left:8px;font-size:13px}
+/* symbols */
+.pal{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px;margin:8px 0}
+.pal button{font-size:21px;padding:6px 0;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
+.pal button:hover{background:#eef3fb;border-color:var(--blue)}
+.pal button small{display:block;font-size:10px;color:var(--muted);font-family:Consolas,monospace}
+.chk{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chk span{border:1px dashed #b9c4d4;border-radius:8px;padding:2px 10px;font-size:18px;color:#94a3b8}
+.chk span.y{border:1px solid var(--ok);background:var(--okbg);color:var(--ok);font-weight:700}
+/* equations */
+.eq{font-family:"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif;font-size:26px;min-height:70px;
+  background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 16px;display:flex;align-items:center;flex-wrap:wrap}
+.eq .v{font-style:italic}
+.eq .op{margin:0 .25em}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .15em;text-align:center}
+.fr>.nu{border-bottom:1.5px solid currentColor;padding:0 .2em .05em}
+.fr>.de{padding:.05em .2em 0}
+.sq{display:inline-flex;align-items:stretch}
+.sq .rad{border-top:1.5px solid currentColor;padding:0 .15em;margin-top:.12em}
+.ss{font-size:.62em;margin-left:1px;line-height:1}
+.ss.sup{vertical-align:.7em}
+.ss.sub{vertical-align:-.35em}
+.ss.both{display:inline-flex;flex-direction:column;vertical-align:middle;justify-content:space-between;height:1.9em;line-height:.9}
+.eq.small{font-size:20px;min-height:0;padding:6px 12px;display:inline-flex}
+.target{margin:6px 0 10px}
+.hint{font-size:13px;color:var(--muted)}
+code.l{background:#eef2f7;padding:1px 6px;border-radius:5px;font-family:Consolas,monospace;font-size:14px}
+table.k{border-collapse:collapse;width:100%;font-size:14px;margin:8px 0}
+table.k th,table.k td{border:1px solid var(--line);padding:6px 9px;text-align:left}
+table.k th{background:#eef3fb}
+/* test */
+.q{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:12px 0;background:#fff}
+.q.right{border-color:#86d19b;background:var(--okbg)}
+.q.wrong{border-color:#f0a3a3;background:var(--badbg)}
+.q label{display:block;padding:4px 6px;border-radius:6px;cursor:pointer}
+.q label:hover{background:#eef3fb}
+.q .exp{font-size:14px;margin-top:6px;color:#334155}
+.res{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.big{font-size:28px;font-weight:700;color:var(--blue2)}
+pre.out{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;white-space:pre-wrap;font-size:13px;max-height:320px;overflow:auto}
+/* modal */
+#gate{position:fixed;inset:0;background:#1e3f73ee;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+#gate .card{background:#fff;border-radius:14px;padding:26px;max-width:440px;width:100%;box-shadow:0 10px 40px #0006}
+#gate h2{margin:0 0 4px}
+#gate label{font-size:14px;color:var(--muted);display:block;margin:10px 0 3px}
+.nav2{display:flex;justify-content:space-between;margin-top:20px}
+@media(max-width:600px){
+  header{position:static;padding:10px 12px}
+  header h1{font-size:16px}
+  section{padding:14px 12px}
+  main,nav{padding-left:8px;padding-right:8px}
+  button.btn{padding:11px 14px}
+  .li{padding:7px 8px}
+  .eq{font-size:22px;overflow-x:auto}
+  .nav2 .btn{padding:11px 12px}
+}
+@media print{header,nav,.nav2,.noprint,#gate{display:none!important}section{display:none!important}section#s-test{display:block!important;box-shadow:none}body{background:#fff}}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="card">
+    <h2>📝 Вітаю на уроці!</h2>
+    <p class="hint">Інформатика · 9 клас · Microsoft Word:<br>багаторівневі списки, спеціальні символи, формули</p>
+    <label for="fn">Ім’я</label>
+    <input type="text" id="fn" autocomplete="given-name" placeholder="Наприклад, Олена">
+    <label for="ln">Прізвище</label>
+    <input type="text" id="ln" autocomplete="family-name" placeholder="Наприклад, Коваленко">
+    <label for="cl">Клас (необов’язково)</label>
+    <input type="text" id="cl" placeholder="9-А">
+    <div class="msg bad" id="gmsg"></div>
+    <button class="btn" id="gstart" style="width:100%;margin-top:6px">Розпочати урок →</button>
+  </div>
+</div>
+
+<header>
+  <div class="hwrap">
+    <h1>Microsoft Word · Списки, символи, формули</h1>
+    <div class="who">Учень: <b id="whoName">—</b><button id="chg" class="noprint">змінити</button></div>
+    <div class="pbar" title="Прогрес уроку"><i id="pb"></i></div>
+  </div>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- ============ 0. Вступ ============ -->
+<section id="s-intro" class="on">
+  <h2>🎯 Мета уроку</h2>
+  <p>Привіт, <b class="nm">учню</b>! Сьогодні ти навчишся оформлювати складні документи в Microsoft Word. Урок інтерактивний: теорію підкріплюють практичні завдання просто на цій сторінці, а наприкінці — тест, результат якого ти надішлеш учителю.</p>
+  <div class="box"><b>Після уроку ти вмітимеш:</b>
+    <ul>
+      <li>створювати та змінювати <b>багаторівневі списки</b> (нумеровані й марковані);</li>
+      <li>вставляти <b>спеціальні символи</b> (©, °, ±, €, → тощо) трьома способами;</li>
+      <li>створювати <b>формули</b> за допомогою редактора рівнянь та швидкого лінійного формату.</li>
+    </ul>
+  </div>
+  <div class="box warn"><b>План:</b> 1) Багаторівневі списки → 2) Спеціальні символи → 3) Формули → 4) Практика у Word → 5) Тест.
+  Завдання з позначкою <span class="badge">завдання</span> змінюють колір на зелений, коли виконані правильно.</div>
+  <div class="nav2"><span></span><button class="btn" data-go="list">Далі: списки →</button></div>
+</section>
+
+<!-- ============ 1. Списки ============ -->
+<section id="s-list">
+  <h2>1️⃣ Багаторівневі списки</h2>
+  <p><b>Багаторівневий список</b> — це список, у якому елементи мають різні рівні вкладеності (підпункти). Так оформлюють плани, змісти, меню, структури документів. У Word може бути до <b>9 рівнів</b>.</p>
+
+  <h3>Як створити в Word</h3>
+  <table class="k">
+    <tr><th>Дія</th><th>Як зробити</th></tr>
+    <tr><td>Створити список</td><td>Вкладка <b>Основне</b> → група <b>Абзац</b> → кнопка <b>Багаторівневий список</b> → обери стиль</td></tr>
+    <tr><td>Опустити елемент на рівень нижче (підпункт)</td><td><kbd>Tab</kbd> (на початку рядка) або кнопка «Збільшити відступ»</td></tr>
+    <tr><td>Підняти елемент на рівень вище</td><td><kbd>Shift</kbd>+<kbd>Tab</kbd> або кнопка «Зменшити відступ»</td></tr>
+    <tr><td>Завершити список</td><td>Двічі натиснути <kbd>Enter</kbd> на порожньому елементі</td></tr>
+    <tr><td>Власний вигляд нумерації</td><td>Багаторівневий список → <b>Визначити новий багаторівневий список…</b></td></tr>
+    <tr><td>Змінити рівень без клавіатури</td><td>Багаторівневий список → <b>Змінити рівень списку</b></td></tr>
+  </table>
+  <div class="box">💡 Word не дозволить «перестрибнути» рівень: елемент може бути лише на 1 рівень глибше за попередній.</div>
+
+  <div class="task" id="t-list">
+    <h3><span class="badge">завдання</span> Побудуй структуру списку</h3>
+    <p>Клікни на рядок і використовуй кнопки або клавіші <kbd>Tab</kbd> / <kbd>Shift+Tab</kbd> (<kbd>↑</kbd><kbd>↓</kbd> — перехід між рядками). Зроби так, щоб структура була такою:</p>
+    <div class="paper" id="listGoal" style="font-size:15px;margin-bottom:10px"></div>
+    <div class="sim">
+      <div class="paper" id="listEd" aria-label="Редактор списку"></div>
+      <div class="ctl">
+        <label class="hint" for="lstyle">Стиль нумерації:</label>
+        <select id="lstyle">
+          <option value="dec">1. → 1.1. → 1.1.1.</option>
+          <option value="mix">1. → a) → i)</option>
+          <option value="bul">● → ○ → ■</option>
+        </select>
+        <button class="btn sec" id="lUp">⇤ Shift+Tab (вище)</button>
+        <button class="btn sec" id="lDn">⇥ Tab (нижче)</button>
+        <button class="btn" id="lChk">Перевірити</button>
+        <button class="btn sec" id="lRst">Почати спочатку</button>
+      </div>
+    </div>
+    <div class="msg" id="lMsg"></div>
+  </div>
+
+  <div class="nav2"><button class="btn sec" data-go="intro">← Назад</button><button class="btn" data-go="sym">Далі: символи →</button></div>
+</section>
+
+<!-- ============ 2. Символи ============ -->
+<section id="s-sym">
+  <h2>2️⃣ Спеціальні символи</h2>
+  <p>На клавіатурі немає знаків ©, °, ±, €, → та інших. Word пропонує <b>три способи</b> їх вставити:</p>
+  <table class="k">
+    <tr><th>Спосіб</th><th>Як</th><th>Приклад</th></tr>
+    <tr><td><b>1. Меню</b></td><td><b>Вставлення → Символ → Інші символи…</b>, виділити знак → <i>Вставити</i></td><td>будь-який символ</td></tr>
+    <tr><td><b>2. Юнікод + Alt+X</b></td><td>набрати шістнадцятковий код і натиснути <kbd>Alt</kbd>+<kbd>X</kbd></td><td><code class="l">20AC</code> → €</td></tr>
+    <tr><td><b>3. Автозаміна</b></td><td>набрати спеціальну послідовність — Word замінить її сам</td><td><code class="l">(c)</code> → ©, <code class="l">--&gt;</code> → →</td></tr>
+  </table>
+  <div class="box">У вікні «Символ» є вкладка <b>Спеціальні символи</b> зі знаками на кшталт ©, ®, ™, §, нерозривного пробілу та довгого тире. Для нерозривного пробілу: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Пробіл</kbd>.</div>
+
+  <div class="task" id="t-sym">
+    <h3><span class="badge">завдання 1</span> Імітація вікна «Символ»</h3>
+    <p>Клікай на символи, щоб вставити їх у «документ». Потрібно ввести <b>всі 8</b> знаків із переліку:</p>
+    <div class="chk" id="symChk"></div>
+    <div class="pal" id="symPal"></div>
+    <textarea id="symDoc" placeholder="Тут будуть вставлені символи. Можна дописувати й власний текст."></textarea>
+    <div class="row" style="margin-top:6px"><button class="btn sec" id="symClr">Очистити</button></div>
+    <div class="msg" id="symMsg"></div>
+  </div>
+
+  <div class="task" id="t-altx">
+    <h3><span class="badge">завдання 2</span> Юнікод-код + <kbd>Alt+X</kbd></h3>
+    <p>Встав у поле послідовно: код <code class="l">00A9</code>, натисни кнопку <b>Alt+X</b> (вона імітує комбінацію) — з’явиться ©. Так само зроби з кодами <code class="l">03C0</code> (π) та <code class="l">221A</code> (√). Усі три символи мають бути в полі одночасно.</p>
+    <div class="row">
+      <input type="text" id="axIn" style="flex:1;min-width:200px" placeholder="Введи код, напр. 00A9" autocomplete="off">
+      <button class="btn" id="axBtn">Alt+X</button>
+    </div>
+    <div class="chk" id="axChk"></div>
+    <div class="msg" id="axMsg"></div>
+  </div>
+
+  <div class="task">
+    <h3>🔧 Спробуй автозаміну</h3>
+    <p class="hint">Набери в полі: <code class="l">(c)</code>, <code class="l">(r)</code>, <code class="l">(tm)</code>, <code class="l">--&gt;</code>, <code class="l">&lt;--</code>, <code class="l">1/2</code> — Word робить це автоматично.</p>
+    <input type="text" id="acIn" placeholder="Набирай тут…" autocomplete="off">
+  </div>
+
+  <div class="nav2"><button class="btn sec" data-go="list">← Назад</button><button class="btn" data-go="eq">Далі: формули →</button></div>
+</section>
+
+<!-- ============ 3. Формули ============ -->
+<section id="s-eq">
+  <h2>3️⃣ Робота з формулами</h2>
+  <p>Формули у Word створюють у вбудованому <b>редакторі рівнянь</b>. Формула — окремий об’єкт зі своїми правилами відображення (дроби, степені, корені).</p>
+  <table class="k">
+    <tr><th>Дія</th><th>Як</th></tr>
+    <tr><td>Вставити формулу</td><td><b>Вставлення → Рівняння</b> (в групі «Символи») або <kbd>Alt</kbd>+<kbd>=</kbd></td></tr>
+    <tr><td>Готові формули</td><td>Стрілка біля кнопки «Рівняння» → теорема Піфагора, площа круга, квадратне рівняння…</td></tr>
+    <tr><td>Власні структури</td><td>З’являється вкладка <b>Рівняння</b> → групи «Структури» (дріб, індекс, радикал, інтеграл…) та «Символи»</td></tr>
+    <tr><td>Рукописне введення</td><td>Рівняння → <b>Рукописне рівняння</b> (для пристроїв із сенсорним екраном)</td></tr>
+  </table>
+
+  <h3>⚡ Лінійний формат — швидкий набір з клавіатури</h3>
+  <p>Набираєш текст у вигляді рядка, а Word після пробілу перетворює його на красиву формулу:</p>
+  <table class="k">
+    <tr><th>Що хочемо</th><th>Набираємо</th><th>Результат</th></tr>
+    <tr><td>Дріб</td><td><code class="l">a/b</code> або <code class="l">(a+b)/2</code></td><td><span class="eq small" data-lin="(a+b)/2"></span></td></tr>
+    <tr><td>Степінь</td><td><code class="l">x^2</code></td><td><span class="eq small" data-lin="x^2"></span></td></tr>
+    <tr><td>Нижній індекс</td><td><code class="l">x_1</code></td><td><span class="eq small" data-lin="x_1"></span></td></tr>
+    <tr><td>Квадратний корінь</td><td><code class="l">\sqrt(x)</code></td><td><span class="eq small" data-lin="\sqrt(x)"></span></td></tr>
+    <tr><td>Грецькі літери</td><td><code class="l">\pi</code>, <code class="l">\alpha</code>, <code class="l">\beta</code></td><td><span class="eq small" data-lin="\pi \alpha \beta"></span></td></tr>
+    <tr><td>Плюс-мінус</td><td><code class="l">+-</code> або <code class="l">\pm</code></td><td><span class="eq small" data-lin="a+-b"></span></td></tr>
+    <tr><td>Не рівно, ≤, ≥</td><td><code class="l">!=</code>, <code class="l">&lt;=</code>, <code class="l">&gt;=</code></td><td><span class="eq small" data-lin="a!=b, a<=b"></span></td></tr>
+  </table>
+  <div class="box warn"><b>Пам’ятай:</b> формулу, набрану в лінійному форматі, треба «активувати» — натисни <kbd>Пробіл</kbd> після закритої дужки або <kbd>Enter</kbd>.</div>
+
+  <h3>🧪 Лабораторія формул</h3>
+  <p class="hint">Пиши у лінійному форматі — праворуч побачиш результат, як у Word.</p>
+  <input type="text" id="labIn" value="x=(-b+-\sqrt(b^2-4ac))/(2a)" autocomplete="off" spellcheck="false">
+  <div class="eq" id="labOut" style="margin-top:8px"></div>
+
+  <div id="eqTasks"></div>
+
+  <div class="nav2"><button class="btn sec" data-go="sym">← Назад</button><button class="btn" data-go="prac">Далі: практика →</button></div>
+</section>
+
+<!-- ============ 4. Практика ============ -->
+<section id="s-prac">
+  <h2>4️⃣ Практика в Microsoft Word</h2>
+  <p>Відкрий Word на своєму комп’ютері й створи документ <b>«<span class="nm">Прізвище</span>_Word.docx»</b>. Познач виконані пункти — це допоможе не пропустити нічого. (Збережений файл покаже вчителеві за його вказівкою.)</p>
+  <div class="task">
+    <label class="chkrow"><input type="checkbox" class="pr"> <b>1.</b> Набери заголовок «Мій навчальний день» і ввівши ім’я та прізвище внизу документа.</label><br>
+    <label class="chkrow"><input type="checkbox" class="pr"> <b>2.</b> Створи багаторівневий список «Розклад» (Основне → Багаторівневий список): мінімум 3 пункти 1-го рівня, у кожному — по 2 підпункти.</label><br>
+    <label class="chkrow"><input type="checkbox" class="pr"> <b>3.</b> Зміни стиль нумерації на «1.1.» через «Визначити новий багаторівневий список…».</label><br>
+    <label class="chkrow"><input type="checkbox" class="pr"> <b>4.</b> Вставити символи: © 2026, температура 20 °C, ціна 15 €, знак ± та стрілку →. Один із них — через Alt+X.</label><br>
+    <label class="chkrow"><input type="checkbox" class="pr"> <b>5.</b> Вставити формулу квадратного рівняння через Вставлення → Рівняння → готова формула.</label><br>
+    <label class="chkrow"><input type="checkbox" class="pr"> <b>6.</b> Створити власну формулу <b>S = (a + b)/2 · h</b> за допомогою Alt+= і лінійного формату.</label><br>
+    <label class="chkrow"><input type="checkbox" class="pr"> <b>7.</b> Збережи документ (Ctrl+S) та покажи вчителю.</label>
+    <div class="msg" id="prMsg"></div>
+  </div>
+  <style>.chkrow{display:block;padding:5px 0;cursor:pointer}</style>
+  <div class="nav2"><button class="btn sec" data-go="eq">← Назад</button><button class="btn" data-go="test">Далі: тест →</button></div>
+</section>
+
+<!-- ============ 5. Тест ============ -->
+<section id="s-test">
+  <h2>5️⃣ Підсумковий тест</h2>
+  <p>13 запитань. Деякі мають <b>кілька</b> правильних відповідей (підписано). Після завершення ти побачиш результат і зможеш надіслати його вчителю.</p>
+  <div id="quiz"></div>
+  <div class="row noprint"><button class="btn" id="qSubmit">Завершити тест</button></div>
+  <div class="msg bad" id="qWarn"></div>
+
+  <div class="res" id="result" style="display:none">
+    <div>Результат для <b class="nm"></b>:</div>
+    <div class="big" id="rScore"></div>
+    <div id="rGrade" style="margin-bottom:8px"></div>
+    <p><b>Як передати результат вчителю</b> (обери будь-який варіант):</p>
+    <div class="row noprint">
+      <button class="btn" id="rDl">⬇ Завантажити .txt</button>
+      <button class="btn sec" id="rCopy">📋 Копіювати</button>
+      <button class="btn sec" id="rMail" style="display:none">✉ Надіслати email</button>
+      <button class="btn sec" id="rPrint">🖨 Друк / PDF</button>
+    </div>
+    <div class="msg" id="rMsg"></div>
+    <pre class="out" id="rOut"></pre>
+  </div>
+  <div class="nav2 noprint"><button class="btn sec" data-go="prac">← Назад</button><span></span></div>
+</section>
+
+</main>
+
+<script>
+/* =====================  НАЛАШТУВАННЯ ДЛЯ ВЧИТЕЛЯ  ===================== */
+const CONFIG = {
+  LESSON_TITLE: "Microsoft Word: багаторівневі списки, спецсимволи, формули (9 клас)",
+  TEACHER_EMAIL: "",   // напр. "teacher@school.ua" — з’явиться кнопка «Надіслати email»
+  WEBHOOK_URL: "",     // URL Google Apps Script (див. README) — результат піде в Google-таблицю автоматично
+};
+/* ======================================================================= */
+
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- збереження (з запасом на випадок заборонених cookies) ---------- */
+const mem = {};
+const store = {
+  get(k){ try{ const v = localStorage.getItem('wl9_'+k); if(v!==null) return v; }catch(e){} return mem[k] ?? null; },
+  set(k,v){ mem[k]=v; try{ localStorage.setItem('wl9_'+k, v); }catch(e){} }
+};
+
+/* ---------- стан ---------- */
+const S = { first:'', last:'', cls:'', start:Date.now(), done:{} };
+const TASKS = ['list','sym','altx','eq1','eq2','eq3','eq4','eq5'];
+const SECTIONS = [
+  ['intro','Вступ'],['list','1. Списки'],['sym','2. Символи'],['eq','3. Формули'],['prac','4. Практика'],['test','5. Тест']
+];
+const SEC_TASKS = { list:['list'], sym:['sym','altx'], eq:['eq1','eq2','eq3','eq4','eq5'] };
+
+function fullName(){ return (S.first+' '+S.last).trim(); }
+function refreshName(){
+  $('#whoName').textContent = fullName() || '—';
+  $$('.nm').forEach(e => e.textContent = fullName() || 'учню');
+}
+function saveProgress(){ store.set('done', JSON.stringify(S.done)); }
+function markDone(id, el){
+  if(!S.done[id]){ S.done[id]=true; saveProgress(); }
+  if(el) el.classList.add('done');
+  updateProgress();
+}
+function updateProgress(){
+  const n = TASKS.filter(t=>S.done[t]).length;
+  const quiz = S.quizDone ? 1 : 0;
+  $('#pb').style.width = Math.round((n+quiz)/(TASKS.length+1)*100)+'%';
+  $$('#nav button').forEach(b=>{
+    const t = SEC_TASKS[b.dataset.go];
+    b.classList.toggle('done', t ? t.every(x=>S.done[x]) : (b.dataset.go==='test' && !!S.quizDone));
+  });
+}
+
+/* ---------- навігація ---------- */
+function go(id){
+  if(!S.first && id!=='intro'){ openGate(); return; }
+  $$('main section').forEach(s=>s.classList.toggle('on', s.id==='s-'+id));
+  $$('#nav button').forEach(b=>b.classList.toggle('on', b.dataset.go===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+$('#nav').innerHTML = SECTIONS.map(([id,t],i)=>`<button data-go="${id}">${t}</button>`).join('');
+document.addEventListener('click', e=>{ const b=e.target.closest('[data-go]'); if(b) go(b.dataset.go); });
+$$('#nav button')[0].classList.add('on');
+
+/* ---------- введення імені ---------- */
+function openGate(){
+  $('#fn').value = S.first; $('#ln').value = S.last; $('#cl').value = S.cls;
+  $('#gate').style.display='flex'; setTimeout(()=>$('#fn').focus(),50);
+}
+function submitGate(){
+  const f = $('#fn').value.trim().replace(/\s+/g,' '), l = $('#ln').value.trim().replace(/\s+/g,' ');
+  if(f.length<2 || l.length<2){ $('#gmsg').textContent='Введи, будь ласка, і ім’я, і прізвище (мінімум 2 літери).'; return; }
+  S.first=f; S.last=l; S.cls=$('#cl').value.trim();
+  store.set('first',f); store.set('last',l); store.set('cls',S.cls);
+  $('#gmsg').textContent=''; $('#gate').style.display='none'; refreshName();
+}
+$('#gstart').onclick = submitGate;
+['fn','ln','cl'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{ if(e.key==='Enter') submitGate(); }));
+$('#chg').onclick = openGate;
+
+/* =====================  1. БАГАТОРІВНЕВИЙ СПИСОК  ===================== */
+const LIST_ITEMS = [
+  ['Пристрої',0],['Введення',1],['Клавіатура',2],['Миша',2],['Виведення',1],['Монітор',2],['Принтер',2],['Програми',0],['Системні',1],['Прикладні',1]
+];
+let L = { items:[], sel:0, style:'dec' };
+const roman = n => ['','i','ii','iii','iv','v','vi','vii','viii','ix','x'][n]||n;
+function numFor(counters, lvl, style){
+  const c = counters[lvl];
+  if(style==='dec') return counters.slice(0,lvl+1).join('.')+'.';
+  if(style==='mix') return lvl===0 ? c+'.' : lvl===1 ? String.fromCharCode(96+c)+')' : roman(c)+')';
+  return ['●','○','■'][lvl%3];
+}
+function renderList(el, items, style, selectable){
+  const cnt=[0,0,0,0,0];
+  el.innerHTML = items.map((it,i)=>{
+    cnt[it.l]++; for(let k=it.l+1;k<cnt.length;k++) cnt[k]=0;
+    const n = numFor(cnt, it.l, style);
+    return `<div class="li${selectable&&i===L.sel?' sel':''}" data-i="${i}" ${selectable?'tabindex="0"':''} style="margin-left:${it.l*28}px"><span class="n">${n}</span>${esc(it.t)}</div>`;
+  }).join('');
+}
+function listReset(){
+  L.items = LIST_ITEMS.map(([t])=>({t,l:0})); L.sel=0; renderList($('#listEd'),L.items,L.style,true);
+  $('#lMsg').textContent=''; $('#lMsg').className='msg';
+}
+function shiftLevel(d){
+  const i=L.sel, it=L.items[i]; if(!it) return;
+  const prev = i>0 ? L.items[i-1].l : -1;
+  let nl = it.l + d;
+  if(nl<0) nl=0;
+  if(i===0) nl=0;
+  if(nl>prev+1) nl=prev+1;
+  it.l = Math.min(nl,8);
+  renderList($('#listEd'),L.items,L.style,true);
+  const e=$('#listEd .li.sel'); if(e) e.focus();
+}
+function selectRow(i){
+  L.sel = Math.max(0,Math.min(L.items.length-1,i));
+  renderList($('#listEd'),L.items,L.style,true);
+  const e=$('#listEd .li.sel'); if(e) e.focus();
+}
+$('#listEd').addEventListener('click',e=>{ const r=e.target.closest('.li'); if(r) selectRow(+r.dataset.i); });
+$('#listEd').addEventListener('keydown',e=>{
+  if(e.key==='Tab'){ e.preventDefault(); shiftLevel(e.shiftKey?-1:1); }
+  else if(e.key==='ArrowDown'){ e.preventDefault(); selectRow(L.sel+1); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); selectRow(L.sel-1); }
+});
+$('#lDn').onclick=()=>shiftLevel(1);
+$('#lUp').onclick=()=>shiftLevel(-1);
+$('#lRst').onclick=listReset;
+$('#lstyle').onchange=e=>{ L.style=e.target.value; renderList($('#listEd'),L.items,L.style,true); renderList($('#listGoal'),LIST_ITEMS.map(([t,l])=>({t,l})),L.style,false); };
+$('#lChk').onclick=()=>{
+  const wrong = L.items.map((it,i)=>it.l!==LIST_ITEMS[i][1]?i:-1).filter(i=>i>=0);
+  const m=$('#lMsg');
+  if(!wrong.length){ m.className='msg ok'; m.innerHTML='✅ Чудово! Структуру побудовано правильно. Спробуй змінити стиль нумерації у списку справа.'; markDone('list',$('#t-list')); }
+  else{ m.className='msg bad'; m.innerHTML='❌ Є помилки у рядках: '+wrong.map(i=>'«'+esc(L.items[i].t)+'»').join(', ')+'. Звір із зразком.'; }
+};
+renderList($('#listGoal'),LIST_ITEMS.map(([t,l])=>({t,l})),'dec',false);
+listReset();
+
+/* =====================  2. СИМВОЛИ  ===================== */
+const SYMS = ['©','®','™','°','±','€','£','¥','§','¶','←','→','↑','↓','↔','≈','≠','≤','≥','½','¼','¾','√','∞','π','Ω','α','β','γ','Δ','∑','·','×','÷','—','№','✓','★','☺','♥'];
+const NEED = ['©','°','±','€','→','≈','≠','½'];
+$('#symPal').innerHTML = SYMS.map(s=>`<button data-s="${s}" title="U+${s.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')}">${s}<small>${s.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')}</small></button>`).join('');
+$('#symPal').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const t=$('#symDoc'); const p=t.selectionStart??t.value.length; t.value=t.value.slice(0,p)+b.dataset.s+t.value.slice(t.selectionEnd??p); t.focus(); t.selectionStart=t.selectionEnd=p+b.dataset.s.length; checkSym(); };
+$('#symClr').onclick=()=>{ $('#symDoc').value=''; checkSym(); };
+function checkSym(){
+  const v=$('#symDoc').value;
+  $('#symChk').innerHTML = NEED.map(s=>`<span class="${v.includes(s)?'y':''}">${s}</span>`).join('');
+  const all = NEED.every(s=>v.includes(s));
+  const m=$('#symMsg');
+  if(all){ m.className='msg ok'; m.textContent='✅ Усі символи вставлено!'; markDone('sym',$('#t-sym')); }
+  else { m.className='msg'; m.textContent=`Знайдено ${NEED.filter(s=>v.includes(s)).length} з ${NEED.length}.`; }
+}
+$('#symDoc').addEventListener('input',checkSym); checkSym();
+
+/* Alt+X */
+const AX = [['00A9','©'],['03C0','π'],['221A','√']];
+function altX(){
+  const inp=$('#axIn'); const m=inp.value.match(/(?:U\+)?([0-9A-Fa-f]{4,5})$/);
+  const msg=$('#axMsg');
+  if(!m){ msg.className='msg bad'; msg.textContent='Спочатку набери шістнадцятковий код (4 символи) — наприклад, 00A9.'; return; }
+  const ch=String.fromCodePoint(parseInt(m[1],16));
+  inp.value = inp.value.slice(0, inp.value.length-m[0].length)+ch;
+  msg.className='msg'; msg.textContent='';
+  checkAx();
+}
+$('#axBtn').onclick=altX;
+$('#axIn').addEventListener('keydown',e=>{ if(e.altKey && e.key.toLowerCase()==='x'){ e.preventDefault(); altX(); } else if(e.key==='Enter'){ altX(); } });
+function checkAx(){
+  const v=$('#axIn').value;
+  $('#axChk').innerHTML = AX.map(([c,s])=>`<span class="${v.includes(s)?'y':''}">${c} → ${s}</span>`).join('');
+  if(AX.every(([,s])=>v.includes(s))){ $('#axMsg').className='msg ok'; $('#axMsg').textContent='✅ Відмінно! Тепер ти знаєш швидкий спосіб вставки символів.'; markDone('altx',$('#t-altx')); }
+}
+$('#axIn').addEventListener('input',checkAx); checkAx();
+
+/* Автозаміна */
+const AC=[[/\(c\)/gi,'©'],[/\(r\)/gi,'®'],[/\(tm\)/gi,'™'],[/-->/g,'→'],[/<--/g,'←'],[/(^|\s)1\/2(?=\s|$)/g,'$1½'],[/:\)/g,'☺']];
+$('#acIn').addEventListener('input',e=>{ let v=e.target.value,o=v; AC.forEach(([r,s])=>v=v.replace(r,s)); if(v!==o) e.target.value=v; });
+
+/* =====================  3. ФОРМУЛИ: рендер лінійного формату  ===================== */
+const GREEK={alpha:'α',beta:'β',gamma:'γ',delta:'δ',theta:'θ',lambda:'λ',mu:'μ',pi:'π',sigma:'σ',phi:'φ',omega:'ω',Delta:'Δ',Omega:'Ω',Sigma:'Σ',
+  inf:'∞',infty:'∞',pm:'±',times:'×',cdot:'·',leq:'≤',geq:'≥',neq:'≠',approx:'≈',rightarrow:'→',deg:'°',sum:'∑',div:'÷'};
+function tokenize(src){
+  src = src.replace(/\s+/g,' ').replace(/\+-/g,'±').replace(/<=/g,'≤').replace(/>=/g,'≥').replace(/!=/g,'≠').replace(/->/g,'→').replace(/\*/g,'·');
+  const raw = src.match(/\\?[A-Za-zА-Яа-яІіЇїЄє]+|\d+(?:[.,]\d+)?|\s|./g) || [];
+  const out=[];
+  raw.forEach(t=>{
+    if(t===' ') return;
+    if(/^[A-Za-zА-Яа-яІіЇїЄє]+$/.test(t) && t!=='sqrt') t.split('').forEach(c=>out.push(c));
+    else out.push(t);
+  });
+  return out;
+}
+function parseEq(tokens){
+  let i=0; const peek=()=>tokens[i];
+  function seq(stop){ const out=[]; while(i<tokens.length && peek()!==stop) out.push(item()); return out; }
+  function item(){ let a=scripted(); while(peek()==='/'){ i++; if(i>=tokens.length) break; a={t:'frac',n:a,d:scripted()}; } return a; }
+  function scripted(){
+    let b=atom(), sup=null, sub=null;
+    while(peek()==='^'||peek()==='_'){ const k=tokens[i++]; if(i>=tokens.length) break; const a=atom(); if(k==='^') sup=a; else sub=a; }
+    return (sup||sub) ? {t:'ss',b,sup,sub} : b;
+  }
+  function atom(){
+    const t=tokens[i++];
+    if(t===undefined) return {t:'txt',v:''};
+    if(t==='('){ const c=seq(')'); i++; return {t:'grp',c}; }
+    if(t==='sqrt'||t==='\\sqrt'){ if(peek()==='('){ i++; const c=seq(')'); i++; return {t:'sqrt',c:[{t:'grp',c}]}; } return {t:'sqrt',c:[atom()]}; }
+    if(t[0]==='\\'){ const w=t.slice(1); return GREEK[w]?{t:'sym',v:GREEK[w]}:{t:'txt',v:w}; }
+    if(/^\d/.test(t)) return {t:'num',v:t};
+    if(/^[A-Za-zА-Яа-яІіЇїЄє]$/.test(t)) return {t:'var',v:t};
+    return {t:'op',v:t};
+  }
+  return seq();
+}
+function unwrap(n){ return n.t==='grp' ? n.c.map(r).join('') : r(n); }
+function r(n){
+  switch(n.t){
+    case 'grp': return '('+n.c.map(r).join('')+')';
+    case 'frac': return `<span class="fr"><span class="nu">${unwrap(n.n)}</span><span class="de">${unwrap(n.d)}</span></span>`;
+    case 'sqrt': return `<span class="sq">√<span class="rad">${n.c.map(unwrap).join('')}</span></span>`;
+    case 'ss': { const both=n.sup&&n.sub; return r(n.b)+`<span class="ss ${both?'both':(n.sup?'sup':'sub')}">${n.sup?'<span>'+unwrap(n.sup)+'</span>':''}${n.sub?'<span>'+unwrap(n.sub)+'</span>':''}</span>`; }
+    case 'var': return `<span class="v">${esc(n.v)}</span>`;
+    case 'num': return esc(n.v);
+    case 'sym': return /[±×·≤≥≠≈→÷]/.test(n.v)?`<span class="op">${n.v}</span>`:(/[α-ωΔΩΣ]/.test(n.v)?`<span class="v">${n.v}</span>`:n.v);
+    case 'op': return /[=+\-−±×·≤≥≠≈→÷<>]/.test(n.v)?`<span class="op">${esc(n.v==='-'?'−':n.v)}</span>`:esc(n.v);
+    default: return esc(n.v||'');
+  }
+}
+function renderEq(src){ try{ return parseEq(tokenize(src)).map(r).join(''); }catch(e){ return ''; } }
+$$('[data-lin]').forEach(e=>e.innerHTML=renderEq(e.dataset.lin));
+
+const lab=()=>{ $('#labOut').innerHTML=renderEq($('#labIn').value)||'<span class="hint">Введи формулу…</span>'; };
+$('#labIn').addEventListener('input',lab); lab();
+
+const EQS = [
+  {id:'eq1', name:'Теорема Піфагора', ans:'a^2+b^2=c^2', hint:'Степінь — знак ^'},
+  {id:'eq2', name:'Площа круга', ans:'S=\\pi r^2', hint:'Грецька літера π: \\pi'},
+  {id:'eq3', name:'Площа трапеції', ans:'S=(a+b)/2*h', hint:'Дріб: чисельник у дужках, потім /2, далі множення *h'},
+  {id:'eq4', name:'Корінь і індекс', ans:'x_1=\\sqrt(x_2^2+y^2)', hint:'Нижній індекс _ , корінь \\sqrt( ) — всередині дужок можна використовувати степінь'},
+  {id:'eq5', name:'Формула коренів квадратного рівняння', ans:'x=(-b+-\\sqrt(b^2-4ac))/(2a)', hint:'Знак ± набирається як +-. Увесь чисельник — у дужках'}
+];
+$('#eqTasks').innerHTML = EQS.map((q,i)=>`
+ <div class="task" id="t-${q.id}">
+   <h3><span class="badge">завдання ${i+1}</span> ${q.name}</h3>
+   <p class="hint">Набери у лінійному форматі формулу, що виглядає так:</p>
+   <div class="target"><span class="eq small" data-tg="${i}"></span></div>
+   <input type="text" data-in="${i}" placeholder="Твій запис у лінійному форматі" autocomplete="off" spellcheck="false">
+   <div class="eq" data-pv="${i}" style="margin-top:8px;min-height:60px"></div>
+   <div class="row" style="margin-top:8px"><button class="btn sec" data-hint="${i}">Підказка</button><button class="btn" data-chk="${i}">Перевірити</button></div>
+   <div class="msg" data-m="${i}"></div>
+ </div>`).join('');
+EQS.forEach((q,i)=>{ $(`[data-tg="${i}"]`).innerHTML=renderEq(q.ans); });
+$('#eqTasks').addEventListener('input',e=>{ const i=e.target.dataset.in; if(i!==undefined) $(`[data-pv="${i}"]`).innerHTML=renderEq(e.target.value); });
+$('#eqTasks').addEventListener('click',e=>{
+  const h=e.target.dataset.hint, c=e.target.dataset.chk;
+  if(h!==undefined){ const m=$(`[data-m="${h}"]`); m.className='msg'; m.innerHTML='💡 '+EQS[h].hint; }
+  if(c!==undefined){
+    const q=EQS[c], v=$(`[data-in="${c}"]`).value, m=$(`[data-m="${c}"]`);
+    const a=renderEq(v), b=renderEq(q.ans);
+    if(v.trim() && a===b){ m.className='msg ok'; m.textContent='✅ Правильно!'; markDone(q.id,$('#t-'+q.id)); }
+    else { m.className='msg bad'; m.textContent='❌ Формула відрізняється від зразка. Порівняй результат з прикладом або натисни «Підказка».'; }
+  }
+});
+
+/* практика */
+$$('.pr').forEach(c=>c.addEventListener('change',()=>{ const n=$$('.pr:checked').length; $('#prMsg').textContent = n===$$('.pr').length ? '🎉 Усі пункти виконано! Покажи документ учителю.' : `Виконано ${n} із ${$$('.pr').length}.`; }));
+
+/* =====================  5. ТЕСТ  ===================== */
+const QUIZ = [
+ {q:'Яку клавішу натискають, щоб перетворити пункт списку на підпункт (опустити на рівень нижче)?', o:['Tab','Shift+Tab','Enter','Ctrl+L'], a:[0], e:'Tab збільшує рівень, Shift+Tab — зменшує.'},
+ {q:'Яка комбінація піднімає пункт списку на рівень вище?', o:['Ctrl+Tab','Shift+Tab','Alt+Tab','Ctrl+Enter'], a:[1], e:'Shift+Tab зменшує відступ — пункт піднімається.'},
+ {q:'На якій вкладці розташована кнопка «Багаторівневий список»?', o:['Вставлення','Макет','Основне','Рецензування'], a:[2], e:'Основне → група «Абзац».'},
+ {q:'Як створити власний вигляд нумерації багаторівневого списку?', o:['Вставлення → Таблиця','Багаторівневий список → Визначити новий багаторівневий список…','Макет → Поля','Файл → Параметри → Мова'], a:[1], e:'Саме там налаштовують формат номера для кожного рівня.'},
+ {q:'Скільки рівнів вкладеності підтримує багаторівневий список у Word?', o:['3','5','9','12'], a:[2], e:'У Word доступно 9 рівнів.'},
+ {q:'Як відкрити вікно з додатковими символами (©, §, ™ тощо)?', o:['Основне → Шрифт → Символ','Вставлення → Символ → Інші символи…','Макет → Символи','Рецензування → Символ'], a:[1], e:'Вкладка «Вставлення», група «Символи».'},
+ {q:'Що вийде, якщо набрати код 20AC і натиснути Alt+X?', o:['$','€','£','©'], a:[1], e:'Юнікод 20AC — це знак євро €.'},
+ {q:'Яка автозаміна вставляє знак авторського права?', o:['(a)','(c)','(cr)','(k)'], a:[1], e:'Набір (c) автоматично замінюється на ©.'},
+ {q:'Яка комбінація клавіш вставляє у документ нову формулу?', o:['Alt+=','Ctrl+F','Shift+F','Ctrl+Alt+Q'], a:[0], e:'Alt+= — швидка вставка рівняння.'},
+ {q:'Які твердження про формули в Word ПРАВИЛЬНІ?', multi:true, o:['Формула вставляється як окремий об’єкт «Рівняння»','У лінійному форматі дріб записують через /','Формулу можна ввести лише мишею','Степінь у лінійному форматі записують через ^'], a:[0,1,3], e:'Формулу можна швидко набрати з клавіатури — лінійний формат підтримує /, ^, _, \\sqrt.'},
+ {q:'Як у лінійному форматі записати x у квадраті (x²)?', o:['x2','x^2','x_2','x**'], a:[1], e:'^ — степінь, _ — нижній індекс.'},
+ {q:'Яка контекстна вкладка з’являється, коли ти виділяєш формулу?', o:['Рівняння','Малюнок','Таблиця','Подання'], a:[0], e:'З’являється вкладка «Рівняння» зі структурами та символами.'},
+ {q:'Що вийде з запису (a+b)/2 після натискання пробілу?', o:['Дріб: чисельник a+b, знаменник 2','Число 2 із приписаним a+b','Звичайний рядок без змін','Корінь із a+b'], a:[0], e:'Word перетворює запис на дріб із чисельником (a+b).'}
+];
+let qState=null, quizStart=Date.now();
+const shuffle = a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+function buildQuiz(){
+  S.quizDone=false; quizStart=Date.now();
+  qState = shuffle(QUIZ.map((_,i)=>i)).map(i=>{ const q=QUIZ[i]; return {i, order:shuffle(q.o.map((_,k)=>k))}; });
+  $('#quiz').innerHTML = qState.map((s,n)=>{
+    const q=QUIZ[s.i];
+    return `<div class="q" data-n="${n}"><b>${n+1}. ${esc(q.q)}</b>${q.multi?' <span class="hint">(кілька відповідей)</span>':''}
+      ${s.order.map(k=>`<label><input type="${q.multi?'checkbox':'radio'}" name="q${n}" value="${k}"> ${esc(q.o[k])}</label>`).join('')}
+      <div class="exp" style="display:none"></div></div>`;
+  }).join('');
+  $('#result').style.display='none'; $('#qSubmit').style.display=''; $('#qWarn').textContent='';
+  updateProgress();
+}
+function gradeOf(p){ return Math.max(1,Math.round(p*12)); }
+function fnv(s){ let h=0x811c9dc5; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,0x01000193)>>>0; } return h.toString(16).toUpperCase().padStart(8,'0'); }
+const two=n=>String(n).padStart(2,'0');
+let lastReport='';
+function submitQuiz(){
+  if(!S.first){ openGate(); return; }
+  const unanswered=[];
+  qState.forEach((s,n)=>{ if(!$$(`[name="q${n}"]:checked`).length) unanswered.push(n+1); });
+  if(unanswered.length){ $('#qWarn').textContent='Дай відповідь на всі запитання. Пропущено: №'+unanswered.join(', №'); return; }
+  $('#qWarn').textContent='';
+  let score=0; const lines=[];
+  qState.forEach((s,n)=>{
+    const q=QUIZ[s.i];
+    const chosen=$$(`[name="q${n}"]:checked`).map(x=>+x.value).sort();
+    const right=q.a.slice().sort();
+    const ok = chosen.length===right.length && chosen.every((v,k)=>v===right[k]);
+    if(ok) score++;
+    const box=$(`.q[data-n="${n}"]`); box.classList.add(ok?'right':'wrong');
+    const ex=$('.exp',box); ex.style.display='block';
+    ex.innerHTML=(ok?'✅ Вірно. ':'❌ Невірно. Правильно: <b>'+right.map(k=>esc(q.o[k])).join('; ')+'</b>. ')+esc(q.e);
+    $$('input',box).forEach(x=>x.disabled=true);
+    lines.push(`${s.i+1}. ${ok?'+':'−'}  ${q.q}\n     Відповідь учня: ${chosen.map(k=>q.o[k]).join('; ')}`+(ok?'':`\n     Правильно: ${right.map(k=>q.o[k]).join('; ')}`));
+  });
+  const total=QUIZ.length, pct=score/total, grade=gradeOf(pct);
+  S.quizDone=true; updateProgress();
+  const d=new Date(), date=`${two(d.getDate())}.${two(d.getMonth()+1)}.${d.getFullYear()} ${two(d.getHours())}:${two(d.getMinutes())}`;
+  const mins=Math.max(1,Math.round((Date.now()-S.start)/60000));
+  const tasksDone=TASKS.filter(t=>S.done[t]).length;
+  const code=fnv(`${fullName()}|${score}/${total}|${date}`);
+  $('#rScore').textContent=`${score} із ${total} (${Math.round(pct*100)}%)`;
+  $('#rGrade').innerHTML=`Оцінка за 12-бальною шкалою: <b>${grade}</b>`;
+  lastReport =
+`РЕЗУЛЬТАТ УРОКУ
+${CONFIG.LESSON_TITLE}
+────────────────────────────────────────
+Учень: ${fullName()}${S.cls?'\nКлас: '+S.cls:''}
+Дата і час: ${date}
+Час на урок: ~${mins} хв
+Інтерактивні завдання: ${tasksDone} із ${TASKS.length}
+Практика у Word (самоперевірка): ${$$('.pr:checked').length} із ${$$('.pr').length}
+────────────────────────────────────────
+ТЕСТ: ${score} із ${total} (${Math.round(pct*100)}%) · оцінка ${grade}/12
+────────────────────────────────────────
+${lines.join('\n')}
+────────────────────────────────────────
+Контрольний код: ${code}`;
+  $('#rOut').textContent=lastReport;
+  $('#result').style.display='block';
+  $('#qSubmit').style.display='none';
+  $('#rMail').style.display = CONFIG.TEACHER_EMAIL ? '' : 'none';
+  $('#rMsg').className='msg'; $('#rMsg').textContent=CONFIG.WEBHOOK_URL?'⏳ Надсилаю результат вчителю…':'';
+  $('#result').scrollIntoView({behavior:'smooth'});
+  if(CONFIG.WEBHOOK_URL) sendWebhook({name:fullName(),cls:S.cls,date,score,total,grade,tasksDone,code,report:lastReport});
+}
+async function sendWebhook(p){
+  const m=$('#rMsg');
+  for(let k=0;k<3;k++){
+    try{
+      await fetch(CONFIG.WEBHOOK_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(p)});
+      m.className='msg ok'; m.textContent='✅ Результат надіслано вчителю в таблицю. На всяк випадок можеш ще завантажити .txt.'; return;
+    }catch(e){ await new Promise(r=>setTimeout(r,1500)); }
+  }
+  m.className='msg bad'; m.textContent='Не вдалося надіслати автоматично (перевір інтернет). Завантаж .txt і передай вчителю.';
+}
+$('#qSubmit').onclick=submitQuiz;
+$('#rDl').onclick=()=>{
+  const blob=new Blob(['﻿'+lastReport],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  const safe=fullName().replace(/[^\p{L}\p{N}]+/gu,'_');
+  a.download=`Word_test_${safe}.txt`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  $('#rMsg').className='msg ok'; $('#rMsg').textContent='Файл збережено в «Завантаження». Передай його вчителю.';
+};
+$('#rCopy').onclick=async()=>{
+  try{ await navigator.clipboard.writeText(lastReport); $('#rMsg').className='msg ok'; $('#rMsg').textContent='Скопійовано! Встав у повідомлення вчителю (Ctrl+V).'; }
+  catch(e){ const r=document.createRange(); r.selectNodeContents($('#rOut')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); $('#rMsg').className='msg'; $('#rMsg').textContent='Текст виділено — натисни Ctrl+C.'; }
+};
+$('#rMail').onclick=()=>{
+  location.href='mailto:'+encodeURIComponent(CONFIG.TEACHER_EMAIL).replace('%40','@')+'?subject='+encodeURIComponent('Word 9 клас — '+fullName())+'&body='+encodeURIComponent(lastReport);
+};
+$('#rPrint').onclick=()=>window.print();
+
+/* ---------- старт ---------- */
+(function init(){
+  try{ S.done = JSON.parse(store.get('done')||'{}'); }catch(e){ S.done={}; }
+  S.first = store.get('first')||''; S.last = store.get('last')||''; S.cls = store.get('cls')||'';
+  buildQuiz(); refreshName(); updateProgress();
+  // збережені виконані завдання
+  const map={list:'#t-list',sym:'#t-sym',altx:'#t-altx'}; EQS.forEach(q=>map[q.id]='#t-'+q.id);
+  Object.keys(S.done).forEach(k=>{ const e=$(map[k]||'#none'); if(e) e.classList.add('done'); });
+  if(S.first){ $('#gate').style.display='none'; }
+  else openGate();
+})();
+</script>
+</body>
+</html>
